@@ -1,4 +1,5 @@
-hello
+"Git is a distributed version control system used for tracking changes in source code during software development.
 
-
-test
+Version Control: Tracks changes made to files, enabling rollback to previous versions if needed.
+Distributed System: Every developer has a local copy of the entire codebase, including its full history.
+Branching and Merging: Allows creation of branches for new features or fixes without affecting the main
