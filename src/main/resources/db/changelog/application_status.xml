@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+	<changeSet author="smit" id="create_application_status">
+        <createTable tableName="application_status">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="application_id" type="uuid"/>
+            <column name="last_updated_at" type="timestamp"/>
+            <column name="last_updated_by" type="varchar(100)"/>
+            <column name="status_name" type="varchar(36)"/>
+            <column name="status_value" type="varchar(36)"/>
+            <column name="error_code" type="varchar(36)"/>
+            <column name="error_message" type="varchar(500)"/>
+            <column name="reason" type="varchar(1000)"/>
+            <column name="send_to_customer_flag" type="boolean"/>
+            <column name="send_to_customer_text" type="varchar(4000)"/>
+            <column name="data_capture_status" type="varchar(100)"/>
+            <column name="number_of_retries" type="int"/>
+            <column name="is_next_step" type="boolean" defaultValue="false"/>
+            <column name="display_order" type="int"/>
+            <column name="startup_phase_status" type="varchar(50)"/>
+            <column name="status_label" type="varchar(100)"/>
+            <column name="data_capture_expiry_at" type="timestamp"/>
+        </createTable>
+
+
+    </changeSet>
+
+
+</databaseChangeLog>

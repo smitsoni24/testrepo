@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="smit" id="index_of_application">
+
+        <createIndex indexName="idx_application_deleted_flag" tableName="application">
+            <column name="deleted_flag"/>
+        </createIndex>
+        <createIndex indexName="idx_application_expired_at" tableName="application">
+            <column name="expired_at"/>
+        </createIndex>
+        <createIndex indexName="idx_application_is_done" tableName="application">
+            <column name="is_done"/>
+        </createIndex>
+        <createIndex indexName="idx_application_status" tableName="application">
+            <column name="status"/>
+        </createIndex>
+        <createIndex indexName="idx_application_user_id" tableName="application">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="smit" id="index_of_application_custome_field">
+        <createIndex indexName="idx_application_custom_field_application_id" tableName="application_custom_field">
+            <column name="application_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="smit" id="index_application_product">
+        <addForeignKeyConstraint
+                baseTableName="application_product"
+                baseColumnNames="application_id"
+                referencedTableName="application"
+                referencedColumnNames="id"
+                constraintName="fk_application_product"/>
+
+        <createIndex indexName="idx_application_prod_applc_id" tableName="application_product">
+            <column name="application_id"/>
+        </createIndex>
+        <createIndex indexName="idx_application_prod_product_id" tableName="application_product">
+            <column name="product_id"/>
+        </createIndex>
+        <createIndex indexName="idx_application_prod_product_type" tableName="application_product">
+            <column name="product_type"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="smit" id="index_of_application_product_setting">
+        <createIndex
+                indexName="application_product_setting_entity_id_idx"
+                tableName="application_product_setting">
+            <column name="entity_id" />
+        </createIndex>
+        <createIndex
+                indexName="application_product_setting_is_deleted_idx"
+                tableName="application_product_setting">
+            <column name="is_deleted" />
+        </createIndex>
+        <createIndex
+                indexName="application_product_setting_product_id_idx"
+                tableName="application_product_setting">
+            <column name="product_id" />
+        </createIndex>
+        <createIndex
+                indexName="unique_non_deleted_application_product_setting_idx"
+                tableName="application_product_setting">
+            <column name="entity_id" />
+            <column name="product_id" />
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="smit" id="index_of_application_status">
+        <addForeignKeyConstraint
+                baseTableName="application_status"
+                baseColumnNames="application_id"
+                referencedTableName="application"
+                referencedColumnNames="id"
+                constraintName="fk_application_status"/>
+
+        <createIndex indexName="idx_application_status_application_id" tableName="application_status">
+            <column name="application_id"/>
+        </createIndex>
+        <createIndex indexName="idx_application_status_status_name" tableName="application_status">
+            <column name="status_name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="smit" id="index_of_flow_step_setting">
+        <addForeignKeyConstraint baseTableName="flow_step_setting"
+                                 baseColumnNames="flow_id"
+                                 referencedTableName="application_product_setting"
+                                 referencedColumnNames="id"
+                                 constraintName="application_product_setting_fk"/>
+
+        <createIndex tableName="flow_step_setting"
+                     indexName="application_step_setting_flow_id_idx">
+            <column name="flow_id" />
+        </createIndex>
+        <createIndex indexName="unique_non_deleted_flow_step_setting_idx" tableName="flow_step_setting" unique="true">
+            <column name="flow_id"/>
+            <column name="step_code"/>
+            <column name="handler"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="smit" id="index_of_flow_step_setting_id">
+        <addForeignKeyConstraint baseTableName="flow_step_trigger"
+                                 baseColumnNames="flow_step_setting_id"
+                                 constraintName="flow_step_trigger_fk"
+                                 referencedTableName="flow_step_setting"
+                                 referencedColumnNames="id" />
+
+        <createIndex tableName="flow_step_trigger"
+                     indexName="application_step_trigger_application_step_setting_id_idx">
+            <column name="flow_step_setting_id" />
+        </createIndex>
+        <createIndex indexName="unique_non_deleted_flow_step_trigger_idx"
+                     tableName="flow_step_trigger" unique="true">
+            <column name="flow_step_setting_id"/>
+            <column name="trigger_condition"/>
+            <column name="trigger_type"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

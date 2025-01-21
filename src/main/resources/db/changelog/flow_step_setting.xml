@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create_flow_step_setting" author="smit">
+        <createTable tableName="flow_step_setting">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="flow_id" type="UUID">
+                <constraints nullable="false" />
+            </column>
+            <column name="step_code" type="VARCHAR(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="required" type="BOOLEAN" defaultValueBoolean="true" />
+            <column name="handler" type="VARCHAR(100)" />
+            <column name="is_initial_step" type="BOOLEAN"
+                defaultValueBoolean="false" />
+            <column name="required_capture_data" type="BOOLEAN"
+                defaultValueBoolean="false" />
+            <column name="retry_enabled" type="BOOLEAN"
+                defaultValueBoolean="false" />
+            <column name="available_statuses" type="VARCHAR(300)" />
+            <column name="initital_status" type="VARCHAR(50)" />
+            <column name="max_retry" type="INTEGER" />
+            <column name="retry_statuses" type="VARCHAR(300)" />
+            <column name="recapture_data_by_applicant_statuses"
+                type="VARCHAR(300)" />
+            <column name="succeed_capture_data_status" type="VARCHAR(50)" />
+            <column name="required_supervisor_review_statuses"
+                type="VARCHAR(300)" />
+            <column name="allowed_applicant_update_statuses_to"
+                type="VARCHAR(300)" />
+            <column name="is_hidden_to_customer" type="BOOLEAN"
+                defaultValueBoolean="false" />
+            <column name="is_hidden_to_supervisor" type="BOOLEAN"
+                defaultValueBoolean="false" />
+            <column name="is_deleted" type="BOOLEAN" />
+            <column name="deleted_at" type="TIMESTAMP" />
+            <column name="created_at" type="TIMESTAMP" />
+            <column name="created_by" type="VARCHAR(100)" />
+            <column name="updated_at" type="TIMESTAMP" />
+            <column name="updated_by" type="VARCHAR(100)" />
+            <column name="display_order" type="INTEGER" />
+            <column name="in_execution_status" type="VARCHAR(50)" />
+            <column name="completion_statuses" type="VARCHAR(300)"
+                defaultValue="'Success,Ignored'" />
+            <column name="excess_max_retry_status" type="VARCHAR(50)" />
+            <column name="allowed_applicant_update_statuses_from"
+                type="VARCHAR(300)" />
+            <column name="request_startup_from_frontend" type="BOOLEAN"
+                defaultValueBoolean="false" />
+            <column name="rerun_startup_statuses" type="VARCHAR(300)" />
+            <column name="required_applicant_review_statuses"
+                type="VARCHAR(300)" />
+            <column name="step_name" type="VARCHAR(100)" />
+            <column name="execution_mode" type="VARCHAR(50)"
+                defaultValue="'Sync'" />
+            <column name="data_capture_expiry_minutes" type="BIGINT" />
+            <column name="approval_category_code" type="VARCHAR(100)" />
+            <column name="pre_execution_delay_ms" type="BIGINT" />
+            <column name="post_execution_delay_ms" type="BIGINT" />
+            <column name="allowed_overwrite_completion_status" type="BOOLEAN"
+                defaultValueBoolean="true" />
+        </createTable>
+
+        
+    </changeSet>
+
+</databaseChangeLog>

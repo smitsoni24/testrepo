@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+	<changeSet id="create_flow_step_trigger" author="user">
+		<createTable tableName="flow_step_trigger">
+			<column name="id" type="UUID">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="flow_step_setting_id" type="UUID">
+				<constraints nullable="true" />
+			</column>
+			<column name="trigger_condition" type="VARCHAR(500)" />
+			<column name="is_deleted" type="BOOLEAN" />
+			<column name="deleted_at" type="TIMESTAMP" />
+			<column name="created_at" type="TIMESTAMP" />
+			<column name="created_by" type="VARCHAR(100)" />
+			<column name="updated_at" type="TIMESTAMP" />
+			<column name="updated_by" type="VARCHAR(100)" />
+			<column name="trigger_type" type="VARCHAR(50)" />
+		</createTable>
+
+	</changeSet>
+
+
+</databaseChangeLog>

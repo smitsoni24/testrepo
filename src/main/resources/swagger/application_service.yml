@@ -1,0 +1,1194 @@
+openapi: 3.0.1
+info:
+  title: Azguards Application Service
+  description: a
+  version: v1.0
+  contact: {}
+tags:
+  - name: Applications
+    description: Manage Applications
+  - name: Product Settings
+    description: Manage Product Settings
+
+servers:
+  - url: http://localhost:4474
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    ProductDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: ee88a19b-c775-4e1a-9bcd-ec8e08a112b9
+        productName:
+          type: string
+          example: Unsecured Flexi Personal Loan
+        productType:
+          type: string
+          example: Unsecured Personal Loan
+        productId:
+          type: string
+          example: productId
+        openingDate:
+          type: string
+          format: date-time
+    ContactDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: ee88a19b-c775-4e1a-9bcd-ec8e08a112b9
+        userId:
+          type: string
+          format: uuid
+          readOnly: true
+          example: ee88a19b-c775-4e1a-9bcd-ec8e08a112b9
+        contactType:
+          enum:
+            - EMAIL
+            - MOBILE_PHONE
+            - HOME_PHONE
+            - OFFICE_PHONE
+            - OFFICE_EMAIL
+          example: EMAIL
+        contactValue:
+          type: string
+          example: hello@example.com
+        isPrimary:
+          type: boolean
+          example: true
+      required:
+        - type
+        - value
+    ApplicantDetails:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        middleName:
+          type: string
+          example: A.
+        fullName:
+          type: string
+          example: John Doe
+        title:
+          type: string
+          example: Mr
+        email:
+          type: string
+          example: john@email.com
+        gender:
+          type: string
+          example: male
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1962-03-01'
+        placeOfBirth:
+          type: string
+          example: Singapore
+        nationality:
+          type: string
+          example: SG
+        description:
+          type: string
+          example: User is having financial issue
+        status:
+          type: string
+          example: Active
+        deletedFlag:
+          type: boolean
+          example: false
+        designation:
+          type: string
+          example: Chief Executive Officer
+        contactDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactDetails'
+    Application:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+          description: Unique identifier of the Application
+          example: 'dc53c987-aadd-4857-b0ed-3a1f3e257863'
+          readOnly: true
+        userId:
+          type: string
+          format: uuid
+          description: Unique identifier of the User Id
+          example: 'dc53c987-aadd-4857-b0ed-3a1f3e257863'
+        status:
+          type: string
+          example: InReview
+          description: Overall status
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Application created date
+          example: '2019-09-23T13:42:31'
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: Application updated date
+          example: '2019-09-23T13:42:31'
+          readOnly: true
+        submitType:
+          type: string
+          description: Application submit type
+          example: 'Submit'
+        productDetails:
+          $ref: '#/components/schemas/ProductDetails'
+        productSetting:
+          $ref: '#/components/schemas/ApplicationProductSetting'
+        applicantDetails:
+          $ref: '#/components/schemas/ApplicantDetails'
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        applicationStatuses:
+          $ref: '#/components/schemas/ApplicationStatusList'
+        companyRelationships:
+          type: array
+          items:
+            type: string
+        createdBy:
+          type: string
+        expiredAt:
+          type: string
+          format: date-time
+          description: Application expiry timestamp
+          example: '2019-09-23T13:42:31'
+          readOnly: true
+        submittedAt:
+          type: string
+          format: date-time
+          description: Application submitted timestamp
+          example: '2023-03-07T13:42:31'
+          readOnly: true
+        cancelledReasonMessage:
+          type: string
+        cancelledReasonCode:
+          type: string
+        cancelledAt:
+          type: string
+          format: date-time
+          description: Application cencelled timestamp
+          example: '2023-03-18T13:42:31'
+          readOnly: true
+        cancelledBy:
+          type: string
+        isDone:
+          type: boolean
+          description: In case the application life cycle is done, then attribute will be true, and no updates on the application allowed at all.
+        approvedAt:
+          type: string
+          format: date-time
+          description: Application approved timestamp
+          example: '2023-03-18T13:42:31'
+          readOnly: true
+    ApplicationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Application'
+    ApplicationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        paging:
+          $ref: '#/components/schemas/PagingInformation'
+    ApplicationStatusResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            applicationId:
+              type: string
+              example: "459a0898-1794-4cdf-bcfa-af353c97ee36"
+            userId:
+              type: string
+              example: "a83026c8-6dc4-4009-a07e-fa6a487e7d94"
+            status:
+              type: string
+              example: "InReview"
+            statusLabel:
+              type: string
+              example: "In Review"
+            dataCaptureStatus:
+              type: string
+              example: "Succeed"
+            dataCaptureExpiryAt:
+              type: string
+              format: date-time
+              description: Application step expiry timestamp
+              example: '2019-09-23T13:42:31'
+            nextCustomerAction:
+              $ref: '#/components/schemas/ApplicationStatus'
+            nextOpsAction:
+              $ref: '#/components/schemas/ApplicationStatus'
+            applicantDetails:
+              $ref: '#/components/schemas/Application'
+            applicationStatuses:
+              $ref: '#/components/schemas/ApplicationStatusList'
+    ApplicationStatusList:
+      type: array
+      description: "The application status name: KEYCLOAK"
+      items:
+        $ref: '#/components/schemas/ApplicationStatus'
+    ApplicationStatus:
+      type: object
+      properties:
+        statusName:
+          type: string
+          example: "KYC"
+        statusLabel:
+          type: string
+          example: "Know Your Customer"
+        statusValue:
+          type: string
+          example: "Success"
+          description: Supported values are Pending, Processing, Success, ConnectionFailure, Failed, ReuploadFailed, OCRConsider, OCRClear, Suspected, Caution, Resubmit, Rejected, ResubmitSelfie, ResubmitID, Approved, Completed, Review
+        orderId:
+          type: integer
+          example: "1"
+        referenceId:
+          type: string
+          example: cee7fd92-55b8-4043-b7c4-1ddfe526e188
+        errorCode:
+          type: string
+          example: "KYC0001"
+        errorMessage:
+          type: string
+          example: "Can not detect user identity from the image"
+        reason:
+          type: string
+        sendToCustomerText:
+          type: string
+        sendToCustomerFlag:
+          type: boolean
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          example: '2022-03-01T10:17:52.169'
+        dataCaptureStatus:
+          type: string
+          example: "Succeed"
+        requiredApplicantReview:
+          type: boolean
+        requiredSupervisorReview:
+          type: boolean
+        isHiddenToCustomer:
+          type: boolean
+        isHiddenToSupervisor:
+          type: boolean
+        isNextStep:
+          type: boolean
+        numberOfRetries:
+          type: integer
+          example: 4
+        startupPhaseStatus:
+          type: string
+          example: "Succeed"
+        dataCaptureExpiryAt:
+          type: string
+          format: date-time
+          description: Application step expiry timestamp
+          example: '2019-09-23T13:42:31'
+        stepSetting:
+          $ref: '#/components/schemas/FlowStepSetting'
+    ApplicationProductDto:
+      type: object
+      properties:
+        productId:
+          type: string
+          example: BankAccountPitaka
+        productName:
+          type: string
+        productType:
+          type: string
+          example: BANK
+    Nationality:
+      type: object
+      properties:
+        country:
+          type: string
+    UpdateApplicationStatusRequest:
+      type: object
+      properties:
+        statusName:
+          type: string
+          example: KYC
+        statusValue:
+          type: string
+          example: Success
+        errorCode:
+          type: string
+          example: 'ONFIDO0001'
+        errorMessage:
+          type: string
+          example: "Can not detect user identity from the image"
+        reason:
+          type: string
+        sendToCustomerFlag:
+          type: boolean
+          description: The indicator allow user to send the notification to customer
+          example: true
+        resetCounterFlag:
+          type: boolean
+          description: The indicator to reset the number of tries to 0
+          example: true
+        sendToCustomerText:
+          type: string
+          description: The text to send to customer
+    PagingInformation:
+      required:
+        - pageNumber
+        - pageSize
+        - totalRecords
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          description: The page number to return (starting at page 1).
+          format: int32
+          example: 1
+        pageSize:
+          type: integer
+          description: The number of records to return in a single request
+          format: int32
+          example: 10
+        totalRecords:
+          type: integer
+          description: Number of total records in the response.
+          format: int64
+          example: 100
+    CustomField:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '418fbdd0-418f-481d-9ea6-19bf42d39ea6'
+          description: Unique id of Custom field.
+        customKey:
+          type: string
+          example: 'SubProcessStep'
+          description: Additional Information for the given context.
+        customValue:
+          type: string
+          example: '78924355'
+          description: Value of the Additional Information.
+        applicationId:
+          type: string
+          example: 'Step1'
+          description: organisation id.
+    ErrorResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Internal error code identification of the platform
+          example: 068.04.500.01
+        message:
+          type: string
+          description: Internal error message of the platform
+          example: 'Database connection error'
+    StepExecutionResult:
+      type: object
+      properties:
+        stepStatus:
+          $ref: '#/components/schemas/ApplicationStatus'
+        application:
+          $ref: '#/components/schemas/Application'
+    ApplicationProductSettingList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationProductSetting'
+    ApplicationProductSetting:
+      type: object
+      required:
+        - productId
+        - entityId
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ee88a19b-c775-4e1a-9bcd-ec8e08a112b9
+        entityId:
+          type: string
+          example: ABC
+        productName:
+          type: string
+          example: Unsecured Flexi Personal Loan
+        productType:
+          type: string
+          example: Unsecured Personal Loan
+        productId:
+          type: string
+          example: productId
+        allowMultipleCompletedApplication:
+          type: boolean
+        allowMultipleApplication:
+          type: boolean
+        finishStatuses:
+          type: string
+          example: Failed
+        finishStatusesList:
+          type: array
+          items:
+            type: string
+        stepSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowStepSetting'
+        statusSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowStatusMatrix'
+        productInfoId:
+          type: string
+        productDetailsValidationEnabled:
+          type: boolean
+          description: "In case set to true then backend will do validate upon application creation to ensure the applied product details are matched with product master data."
+        autoExpiryInMinutes:
+          type: integer
+          description: "Automatically expire the application if the application is not DONE within autoExpiryInMinutes minutes"
+        autoExpiryMinutesPostSubmit:
+          type: integer
+          description: "Automatically expire the application if the application is not DONE within autoExpiryInMinutes minutes after submit"
+        initialAccountStatus :
+          type: string
+        allowedCancelApplicationStatuses:
+          type: string
+          example: Draft
+        allowedCancelApplicationStatusList:
+          type: array
+          items:
+            type: string
+          description: The list contains all the possible status list for application cancellation.
+        cancelledStatusPreSubmittion:
+          type: string
+        cancelledStatusPostSubmittion:
+          type: string
+          example: Cancelled
+        preSubmitStatus:
+          type: string
+          example: Draft
+        postSubmitStatus:
+          type: string
+          example: Processing
+        allowedAutoExpireStatusList:
+          type: array
+          items:
+            type: string
+    ApplicationProductSettingAdvSearch:
+      type: object
+      required:
+        - productId
+        - stepSettings
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ee88a19b-c775-4e1a-9bcd-ec8e08a112b9
+        entityId:
+          type: string
+          example: ABC
+        productName:
+          type: string
+          example: Unsecured Flexi Personal Loan
+        productType:
+          type: string
+          example: Unsecured Personal Loan
+        productId:
+          type: string
+          example: productId
+        stepSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowStepSettingAdvSearch'
+    ProductNameAdvSearch:
+      type: object
+      required:
+        - productId
+      properties:
+        productType:
+          type: string
+          example: card
+        productId:
+          type: array
+          items:
+            type: string
+          description: "The list of product id"
+    ProductTypeAdvSearch:
+      type: object
+      required:
+        - productType
+      properties:
+        productType:
+          type: array
+          items:
+            type: string
+          description: "The list of product type"
+    FlowStatusMatrix:
+      type: object
+      required:
+        - flowId
+        - overallStatus
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ee88a19b-c775-4e1a-9bcd-ec8e08a112b9
+        flowId:
+          type: string
+        overallStatus:
+          type: string
+          example: Success
+        statusesCondition:
+          type: string
+          example: 'KYC=Success&&AML_NAME_SCREENING=Success&&EDD=Success'
+        priority:
+          type: integer
+          description: The priority the lower will be considered first
+          format: int32
+          example: 10
+        statusesConditionList:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    FlowStepTrigger:
+      type: object
+      required:
+        - triggerCondition
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ee88a19b-c775-4e1a-9bcd-ec8e08a112b9
+        triggerCondition:
+          type: string
+          example: AML_NAME_SCREENING==Success,AML_RISK_RATING==Pending
+        triggerType:
+          type: string
+          enum:
+            - EXECUTE
+            - IGNORE
+            - RESET_STATUS
+          description: |
+            EXECUTE, if this trigger type is matched then step execution will be executed
+            IGNORE, if this trigger type is matched then step will be updated as Ignored and step is ignored
+            RESET_STATUS, if this trigger type is matched then step status will be reset to initial step status
+    FlowStepSetting:
+      type: object
+      required:
+        - flowId
+        - stepCode
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ee88a19b-c775-4e1a-9bcd-ec8e08a112b9
+        flowId:
+          type: string
+          description: "Map to product setting ID"
+        stepCode:
+          type: string
+          example: KYC
+          description: "The code of step in the flow"
+        stepName:
+          type: string
+          example: "Know Your Customer"
+          description: "The name of step to shown on user interface"
+        required:
+          type: boolean
+          description: "Set to true in case this step is mandatory in the flow"
+        handler:
+          type: string
+          example: KYCStepHandler
+          description: "The Java bean class name to handler logic for this step"
+        executionMode:
+          type: string
+          description: "The execution mode, can be Async or Sync, default is Sync"
+        isInitialStep:
+          type: boolean
+          description: "default required value is false. The true means once the application is created & submitted this step should be trigged"
+        requiredCaptureData:
+          type: boolean
+          description: "indicate if this step is required to collect some data in advance before execution"
+        retryEnabled:
+          type: boolean
+          description: "Indicate if this step is allowed to be retried. Not in use now."
+        availableStatuses:
+          type: string
+          example: Pending,Processing,Succeed,Failed,Resubmit
+          description: "The list of supported status for this step separated by comma"
+        availableStatusesList:
+          type: array
+          items:
+            type: string
+          description: "The list of supported status for this step"
+        inititalStatus:
+          type: string
+          example: Pending
+          description: "the status should be assigned once the application is created & submitted"
+        maxRetry:
+          type: integer
+          format: int32
+          example: 3
+          description: Max number of retry or re-execution for this step
+        retryStatuses:
+          type: string
+          example: Pending,Processing,Succeed,Failed
+          description: The list of statuses which allow this step to be retried or re-executed from
+        retryStatusesList:
+          type: array
+          items:
+            type: string
+          description: The list of statuses which allow this step to be retried or re-executed from
+        recaptureDataByApplicantStatuses:
+          type: string
+          example: Resubmit,Failed
+          description: The list of status which required to re-capture data separated by comma. Example Resubmit, ResubmitID, ResubmitSelfie, OCRClear, OCRConsider status in KYC step
+        recaptureDataByApplicantStatusesList:
+          type: array
+          items:
+            type: string
+          description: The list of status which required to re-capture data separated by comma. Example Resubmit, ResubmitID, ResubmitSelfie, OCRClear, OCRConsider status in KYC step
+        succeedCaptureDataStatus:
+          type: string
+          example: Processing
+          description: the status of step in case capture data successfully
+        requiredSupervisorReviewStatuses:
+          type: string
+          example: Failed
+          description: the status list which required to get review from supervisor or product issuer manager
+        requiredSupervisorReviewStatusesList:
+          type: array
+          items:
+            type: string
+          description: the status list which required to get review from the applicant
+        requiredApplicantReviewStatuses:
+          type: string
+          example: Failed
+          description: the status list which required to get review from the applicant
+        requiredApplicantReviewStatusesList:
+          type: array
+          items:
+            type: string
+          description: the status list which required to get review from supervisor or product issuer manager
+        allowedApplicantUpdateStatusesTo:
+          type: string
+          example: Succeed,Rejected
+          description: The list of status which applicant can update this step status to
+        allowedApplicantUpdateStatusesToList:
+          type: array
+          items:
+            type: string
+          description: The list of status which applicant can update this step status to
+        allowedApplicantUpdateStatusesFrom:
+          type: string
+          example: Succeed,Rejected
+          description: The list of status which applicant can update this step status from to any status defined in allowed_applicant_update_statues_to
+        allowedApplicantUpdateStatusesFromList:
+          type: array
+          items:
+            type: string
+          description: The list of status which applicant can update this step status from to any status defined in allowed_applicant_update_statues_to
+        isHiddenToCustomer:
+          type: boolean
+        isHiddenToSupervisor:
+          type: boolean
+          description: "Set to true if we don't want to shown this step in the Admin Portal"
+        inExecutionStatus:
+          type: string
+          example: Pending
+          description: the status should be assigned once the step is start to be executed in the method executeStep
+        displayOrder:
+          type: integer
+          format: int32
+          example: 2
+          description: "The show order of the step in the Admin Portal, the smaller will be on top"
+        completionStatuses:
+          type: string
+          example: Success
+          description: The list of statuses which makes the step is considered as completed, no more changes can be done, no more step execution can be triggered
+        completionStatusesList:
+          type: array
+          items:
+            type: string
+          description: The list of statuses which makes the step is considered as completed, no more changes can be done, no more step execution can be triggered
+        excessMaxRetryStatus:
+          type: string
+          example: Success
+          description: The status of step will be updated in case the max_retry is reached
+        requestStartupFromFrontend:
+          type: boolean
+          description: Indicate if this step required frontend to call API to start or initiate the step
+        rerunStartupStatuses:
+          type: string
+          example: Success
+          description: The list of status which required to re-run the startup phase in the step, the statuses are separated by comma. Example Resubmit, ResubmitID, ResubmitSelfie status in KYC step
+        rerunStartupStatusesList:
+          type: array
+          items:
+            type: string
+          description: The list of status which required to re-run the startup phase in the step, the statuses are separated by comma. Example Resubmit, ResubmitID, ResubmitSelfie status in KYC step
+        dataCaptureExpiryMinutes:
+          type: integer
+          format: int64
+          description: Step data capture time out duration in minutes, in case the duration is over without data captured then this step status will auto updated to be Expired
+        executeTriggers:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowStepTrigger'
+        ignoreTriggers:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowStepTrigger'
+        resetStatusTriggers:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowStepTrigger'
+        approvalCategoryCode:
+          type: string
+          description: Category code of approval
+        preExecutionDelayMs:
+          type: integer
+          format: int64
+          description: The delay in milliseconds before the step is executed
+        postExecutionDelayMs:
+          type: integer
+          format : int64
+          description: The delay in milliseconds after the step is executed
+        allowedOverwriteCompletionStatus:
+          type: boolean
+          description: "Set to true if allowed overwrite completion status upon execution"
+        ignoredStepByApplicationCreatorRole:
+          type: boolean
+          description: Indicate if this step should be ignored in case of application created by admin
+        allowUpdateStatusOverApplicationFinish:
+          type: boolean
+          description: Indicate if this step is allowed to update status in case application is finished
+    FlowStepSettingAdvSearch:
+      type: object
+      required:
+        - stepName
+        - availableStatusesList
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ee88a19b-c775-4e1a-9bcd-ec8e08a112b9
+        stepName:
+          type: string
+          example: "Create And Link Wallet"
+          description: "The name of step to shown on user interface"
+        stepCode:
+          type: string
+          example: "CREATE_WALLET"
+          description: "The code of step"
+        availableStatusesList:
+          type: array
+          items:
+            type: string
+          description: "The list of supported status for this step"
+        displayOrder:
+          type: integer
+          format: int32
+          example: 2
+          description: "The show order of the step in the Admin Portal, the smaller will be on top"
+    CancelApplicationRequest:
+      type: object
+      properties:
+        reasonCode:
+          type: string
+        reasonMessage:
+          type: string
+
+paths:
+  '/applications':
+    post:
+      operationId: createApplication
+      summary: Create An Application
+      description: As a Customer, I am able to initiate an Application for a New Product / Account. A New Application is created on behalf of the Customer and a Create New Application event is generated and it represents the Start of the Account Opening Process.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponse'
+        400:
+          description: Bad Request
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.400.01'
+                  message: 'Bad request. Please check your request details and try again.'
+        500:
+          description: Internal server error
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.500.01'
+                  message: 'Error occurred while processing your request. Please try again later.'
+      tags:
+        - Applications
+      security:
+        - bearer: []
+  /applications/{applicationId}:
+    patch:
+      operationId: patchApplication
+      summary: Update An Application
+      description: As a Customer, I am able to Submit or Update Information required by the Account Opening Process. This may include Customer Personal, Financial and Employment information.
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponse'
+        400:
+          description: Bad Request
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.400.01'
+                  message: 'Bad request. Please check your request details and try again.'
+        403:
+          description: Unauthorized
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.401.01'
+                  message: 'Invalid authentication credentials for the target resource.'
+        500:
+          description: Internal server error
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.500.01'
+                  message: 'Error occurred while processing your request. Please try again later.'
+        '404':
+          description: Application not found
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.401.01'
+                  message: 'Requested resource not found.'
+      tags:
+        - Applications
+      security:
+        - bearer: []
+    get:
+      operationId: getApplication
+      summary: Get An Application
+      description: View application details by provided application `Id`
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          schema:
+            type: string
+            format: UUID
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponse'
+        '404':
+          description: Application not found
+      tags:
+        - Applications
+      security:
+        - bearer: []
+  /applications/{applicationId}/status:
+    get:
+      operationId: getApplicationStatus
+      summary: Get An Application Status
+      description: As a Admin, I am able to see the application status of the customer with status of each step and whole application status
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationStatusResponse'
+        '404':
+          description: Loan application not found
+      tags:
+        - Applications
+      security:
+        - bearer: []
+    put:
+      operationId: updateApplicationStatus
+      summary: Update An Application Status
+      description: As a Admin, I am able to update the application status for the customer in case need to correct the application status
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UpdateApplicationStatusRequest'
+
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponse'
+      tags:
+        - Applications
+      security:
+        - bearer: []
+
+  /applications/{applicationId}/statuses/{statusName}/initiations:
+    patch:
+      operationId: initiateStep
+      summary: Start An Application Step
+      description: Trigger authentication token generation flow for particular step in application
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          schema:
+            type: string
+            format: uuid
+        - name: statusName
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponse'
+        400:
+          description: Bad Request
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.400.01'
+                  message: 'Bad request. Please check your request details and try again.'
+        403:
+          description: Unauthorized
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.401.01'
+                  message: 'Invalid authentication credentials for the target resource.'
+        500:
+          description: Internal server error
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.500.01'
+                  message: 'Error occurred while processing your request. Please try again later.'
+        '404':
+          description: Application not found
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.401.01'
+                  message: 'Requested resource not found.'
+      tags:
+        - Applications
+      security:
+        - bearer: [ ]
+
+  /applications/{applicationId}/cancellation:
+    patch:
+      operationId: cancelApplication
+      summary: Cancel An Application
+      description: As a `Customer`, I am able to cancel application
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelApplicationRequest'
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponse'
+        400:
+          description: Bad Request
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.400.01'
+                  message: 'Bad request. Please check your request details and try again.'
+        403:
+          description: Unauthorized
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.401.01'
+                  message: 'Invalid authentication credentials for the target resource.'
+        500:
+          description: Internal server error
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.500.01'
+                  message: 'Error occurred while processing your request. Please try again later.'
+        '404':
+          description: Application not found
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                - code: '089.01.401.01'
+                  message: 'Requested resource not found.'
+      tags:
+        - Applications
+      security:
+        - bearer: [ ]
+     
+  /product-settings:
+    get:
+      operationId: searchProductSettings
+      summary: Get Application Product Settings
+      description: Search product settings in the platform for onboarding new application
+      tags:
+        - Product Settings
+      parameters:
+        - name: productId
+          in: query
+          schema:
+            type: string
+        - name: bankId
+          in: query
+          schema:
+            type: string
+        - name: eligibleOnly
+          in: query
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Get product settings list success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationProductSettingList'
+

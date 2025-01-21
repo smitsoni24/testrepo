@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+	<include file="db\changelog\flow_step_setting.xml" />
+	<include file="db\changelog\flow_step_trigger.xml" />
+	<include file="db\changelog\application_product_setting.xml" />
+	<include file="db\changelog\application.xml" />
+	<include file="db\changelog\application_custom_field.xml" />
+	<include file="db\changelog\application_product.xml" />
+	<include file="db\changelog\application_status.xml" />
+	<include file="db\changelog\indexes_of_all_tables.xml" />
+</databaseChangeLog>

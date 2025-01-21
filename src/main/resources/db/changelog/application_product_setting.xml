@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+	<changeSet id="create_application_product_setting" author="smit">
+
+		<createTable tableName="application_product_setting">
+			<column name="id" type="UUID">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="entity_id" type="VARCHAR(100)" />
+			<column name="product_id" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="product_type" type="VARCHAR(100)" />
+			<column name="product_name" type="VARCHAR(200)" />
+			<column name="allow_multiple_completed_application" type="BOOLEAN"
+				defaultValueBoolean="false">
+				<constraints nullable="false" />
+			</column>
+			<column name="allow_multiple_application" type="BOOLEAN"
+				defaultValueBoolean="false">
+				<constraints nullable="false" />
+			</column>
+			<column name="is_deleted" type="BOOLEAN" />
+			<column name="deleted_at" type="TIMESTAMP" />
+			<column name="created_at" type="TIMESTAMP" />
+			<column name="created_by" type="VARCHAR(100)" />
+			<column name="updated_at" type="TIMESTAMP" />
+			<column name="updated_by" type="VARCHAR(100)" />
+			<column name="finish_statuses" type="VARCHAR(300)"
+				defaultValue="'Completed,Rejected'" />
+			<column name="auto_expiry_in_minutes" type="BIGINT" />
+			<column name="allowed_cancel_application_statuses"
+				type="VARCHAR(300)" defaultValue="'Draft'" />
+			<column name="cancelled_status_pre_submittion" type="VARCHAR(50)"
+				defaultValue="'Cancelled'" />
+			<column name="cancelled_status_post_submittion" type="VARCHAR(50)"
+				defaultValue="'Withdrawn'" />
+			<column name="pre_submit_status" type="VARCHAR(50)"
+				defaultValue="'Draft'" />
+			<column name="post_submit_status" type="VARCHAR(50)"
+				defaultValue="'Processing'" />
+			<column name="allowed_auto_expire_statuses" type="VARCHAR(300)"
+				defaultValue="'Draft'" />
+			<column name="auto_expiry_minutes_post_submit" type="BIGINT" />
+		</createTable>
+	</changeSet>
+
+</databaseChangeLog>
