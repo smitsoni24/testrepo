@@ -25,7 +25,7 @@ services:
 
   mariadb:
     image: 'mariadb:latest'
-    container_name: mariadb12
+    container_name: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: azguards_application
