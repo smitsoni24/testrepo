@@ -36,9 +36,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'Docker-hub-key', toolName: 'docker') {
-                        sh "docker build -t ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG} -f Dockerfile ."
-                    }
+                    sh "docker build -t ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG} -f Dockerfile ."
                 }
             }
         }
@@ -73,16 +71,19 @@ pipeline {
             steps {
                 script {
                     sshagent(['server-ssh-cred']) {
-                        sh '''
+                        sh """
                             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} "
                                 # Create network if it doesn't exist
-                                docker network create azguards-whatsapp || true
+                                docker network inspect azguards-whatsapp >/dev/null 2>&1 || docker network create azguards-whatsapp
 
                                 # Stop and remove existing container
                                 docker stop ${CONTAINER_NAME} || true
                                 docker rm ${CONTAINER_NAME} || true
 
-                                # Run new container
+                                # Pull the latest image
+                                docker pull ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG}
+
+                                # Run the new container
                                 docker run -d \\
                                     --name ${CONTAINER_NAME} \\
                                     --network azguards-whatsapp \\
@@ -92,11 +93,12 @@ pipeline {
                                     -e SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD} \\
                                     -e SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092 \\
                                     ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG}"
-                        '''
+                        """
                     }
                 }
             }
         }
+    }
     post {
         success {
             echo 'Build, Push, and Deployment Successful'
