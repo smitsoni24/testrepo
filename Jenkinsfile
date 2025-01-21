@@ -63,6 +63,11 @@ pipeline {
             steps {
                 script {
                     sshagent(['server-ssh-cred']) { // Use the ID of the SSH credential you added in Jenkins
+
+                        // Copy docker-compose file to server
+                              sh """
+                                   scp -o StrictHostKeyChecking=no docker-compose.yml ${SERVER_USER}@${SERVER_IP}:~/docker-compose.yml
+                              """
                         sh """
                         ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP}
                             docker pull ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG}
