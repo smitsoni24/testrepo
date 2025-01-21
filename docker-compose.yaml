@@ -30,8 +30,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: azguards_application
-      MYSQL_USER: azguards_application
-      MYSQL_PASSWORD: admin
+      MYSQL_USER: devUser
+      MYSQL_PASSWORD: DevTEst@Kit123!@456
     volumes:
       - dbdata:/var/lib/mysql
     ports:
