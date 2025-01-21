@@ -73,8 +73,8 @@ pipeline {
             steps {
                 script {
                     sshagent(['server-ssh-cred']) {
-                        sh """
-                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} '
+                        sh '''
+                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} "
                                 # Create network if it doesn't exist
                                 docker network create azguards-whatsapp || true
 
@@ -83,21 +83,20 @@ pipeline {
                                 docker rm ${CONTAINER_NAME} || true
 
                                 # Run new container
-                                docker run -d \
-                                    --name ${CONTAINER_NAME} \
-                                    --network azguards-whatsapp \
-                                    -p 8090:8090 \
-                                    -e SPRING_DATASOURCE_URL="jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}?allowMultiQueries=true" \
-                                    -e SPRING_DATASOURCE_USERNAME="${DB_USER}" \
-                                    -e SPRING_DATASOURCE_PASSWORD="${DB_PASSWORD}" \
-                                    -e SPRING_KAFKA_BOOTSTRAP_SERVERS="kafka:9092" \
-                                    ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG}'
-                            """
+                                docker run -d \\
+                                    --name ${CONTAINER_NAME} \\
+                                    --network azguards-whatsapp \\
+                                    -p 8090:8090 \\
+                                    -e SPRING_DATASOURCE_URL=jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}?allowMultiQueries=true \\
+                                    -e SPRING_DATASOURCE_USERNAME=${DB_USER} \\
+                                    -e SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD} \\
+                                    -e SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092 \\
+                                    ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG}"
+                        '''
                     }
                 }
             }
         }
-    }
     post {
         success {
             echo 'Build, Push, and Deployment Successful'
