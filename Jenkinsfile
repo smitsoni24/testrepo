@@ -30,7 +30,12 @@ pipeline {
                     withDockerRegistry(credentialsId: 'Docker-hub-key', toolName: 'docker') {
                         def buildTag = "${CONTAINER_NAME}"
                         def latestTag = "${CONTAINER_NAME}:latest"  // Define latest tag
-                        sh "docker build -t ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG} -f Dockerfile ."
+                         sshagent(['server-ssh-cred']) { // Use the ID of the SSH credential you added in Jenkins
+                                                sh """
+                                                ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP}
+                                                   sh "docker build -t ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG} -f Dockerfile ."
+                                                """
+                                            }
                     }
                 }
             }
