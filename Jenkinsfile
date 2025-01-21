@@ -36,25 +36,25 @@ pipeline {
             }
         }
 
-        stage('Trivy Vulnerability Scan') {
-                    steps {
-                        sh """
-                            # Run Trivy scan
-                            trivy image \
-                                --severity HIGH,CRITICAL \
-                                --exit-code 1 \
-                                --no-progress \
-                                --clear-cache \
-                                ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG}
-                        """
-                    }
-                }
-
         stage('Push Docker Image') {
             steps {
                 sh """
                     docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASS}
                     docker push ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG}
+                """
+            }
+        }
+
+        stage('Trivy Vulnerability Scan') {
+            steps {
+                sh """
+                    # Run Trivy scan
+                    trivy image \
+                        --severity HIGH,CRITICAL \
+                        --exit-code 1 \
+                        --no-progress \
+                        --clear-cache \
+                        ${DOCKER_HUB_USER}/${DOCKER_IMAGE_TAG}
                 """
             }
         }
