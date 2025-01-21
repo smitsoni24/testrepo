@@ -7,8 +7,7 @@ pipeline {
         DOCKER_HUB_USER = "smitsoni004"
         DOCKER_HUB_PASS = "Smitsoni@004"
         DOCKER_IMAGE_TAG = "azguards_application:latest"
-//         SERVER_IP = "172.31.38.158"  // Replace with your server's IP address
-        SERVER_IP = "13.235.12.7"  // Replace with your server's IP address
+        SERVER_IP = "172.31.38.158"  // Replace with your server's IP address
         SERVER_USER = "ubuntu"       // Replace with your server's username
         CONTAINER_NAME = "azguards-application" // Name for the Docker container
     }
